@@ -80,7 +80,9 @@ bot = {
 }
 
 bot.getUsers().then(function(data){
-	users = data.filter(function(user){return user.online_status == 1});
+	users = data.filter(function(user){return user.online_status < 3});
+
+	console.log(data);
 
 	users = users.map(function(user){return user.user_id});
 
@@ -96,7 +98,15 @@ bot.getUsers().then(function(data){
 		like_promises = users.map(function(user){return bot.vote(user.user_id)});
 
 		Promise.all(like_promises).then(function(data){
-			console.log(data);
+			var likes_count = 0;
+
+			data.forEach(function(like){
+				if(like.body[0.message_type != 1]){
+					likes_count++;
+				}
+
+				console.log("Liked " + likes_count + " users! ");
+			});
 		});
 	});
 });
