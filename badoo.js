@@ -119,8 +119,14 @@ window.bot = {
 			});
 
 			Promise.all(userDetailsPromises).then(function(users){
+				var captcha = false;
+
 				users = users.filter(function(user){
-					if(user.my_vote == 1){
+					if(user == undefined){
+						captcha = true;
+						return false;
+					}
+					else if(user.my_vote == 1){
 						return true;
 					}
 					else
@@ -130,6 +136,11 @@ window.bot = {
 						return false;
 					}
 				});
+
+				if(captcha){
+					alert("Solve captcha! ");
+					return;
+				}
 
 				console.log(users.length + " users to like! ");
 
