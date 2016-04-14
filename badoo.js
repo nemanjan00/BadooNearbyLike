@@ -82,16 +82,32 @@ bot = {
 bot.getUsers().then(function(data){
 	users = data.filter(function(user){return user.online_status < 3});
 
-	console.log(data);
-
 	users = users.map(function(user){return user.user_id});
+
+	users = users.filter(function(user){
+		if(localStorage.getItem("user-"+user) != undefined){
+			return false;
+		}
+
+		return true;
+	});
 
 	var userDetailsPromises = users.map(function(user_id){
 		return bot.getUser(user_id);
 	});
 
 	Promise.all(userDetailsPromises).then(function(users){
-		users = users.filter(function(user){return user.my_vote == 1});
+		users = users.filter(function(user){
+			if(user.my_vote == 1){
+				return true;
+			}
+			else
+			{
+				localStorage.setItem("user-" + user.user_id, true);
+
+				return false;
+			}
+		});
 
 		console.log(users.length + " users to like! ");
 
@@ -100,8 +116,10 @@ bot.getUsers().then(function(data){
 		Promise.all(like_promises).then(function(data){
 			var likes_count = 0;
 
-			data.forEach(function(like){
+			data.forEach(function(like, key){
 				if(like.body[0].message_type != 1){
+					localStorage.setItem("user-" + users[key].user_id, true);
+
 					likes_count++;
 				}
 			});
