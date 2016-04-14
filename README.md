@@ -1,5 +1,7 @@
 # BadooNearbyAutolike
 
+![](https://raw.githubusercontent.com/nemanjan00/BadooNearbyLike/master/screenshot/screenshot.png)
+
 ## Todo: 
 
 - [x] Save liked users to localStorage
