@@ -80,8 +80,6 @@ bot = {
 }
 
 bot.getUsers().then(function(data){
-	console.log(data);
-
 	users = data.filter(function(user){return user.online_status == 1});
 
 	users = users.map(function(user){return user.user_id});
@@ -93,7 +91,7 @@ bot.getUsers().then(function(data){
 	Promise.all(userDetailsPromises).then(function(users){
 		users = users.filter(function(user){return user.my_vote == 1});
 
-		console.log(users.length);
+		console.log(users.length + " users to like! ");
 
 		users.forEach(function(user){
 			bot.vote(user.user_id);
