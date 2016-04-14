@@ -1,16 +1,17 @@
 // ==UserScript==
-// @name Badoo-Autolike
+// @name BadooNearbyAutolike
 // @author nemanjan00
 // @include https://badoo.com/*
 // @include https://*.badoo.com/*
 // @include http://badoo.com/*
 // @include http://*.badoo.com/*
-// @downloadURL https://raw.githubusercontent.com/nemanjan00/Badoo-Autolike/master/Badoo-Autolike.user.js
-// @namespace https://github.com/nemanjan00/Badoo-Autolike
-// @updateURL https://raw.githubusercontent.com/nemanjan00/Badoo-Autolike/master/Badoo-Autolike.user.js
-// @version 6
+// @downloadURL https://raw.githubusercontent.com/nemanjan00/BadooNearbyLike/master/badoo.userscript.js
+// @namespace https://github.com/nemanjan00/BadooNearbyAutolike
+// @updateURL https://raw.githubusercontent.com/nemanjan00/BadooNearbyLike/master/badoo.userscript.js
+// @version 1
 // ==/UserScript==
 
-code = atob("{{code}}");
+var code = atob("{{code}}");
 
-location.href="javascript:(function(){" + code + "})()"
+location.href="javascript:(function(){" + code + "})()";
+
