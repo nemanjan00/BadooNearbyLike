@@ -2,12 +2,6 @@
 
 ![](https://raw.githubusercontent.com/nemanjan00/BadooNearbyLike/master/screenshot/screenshot.png)
 
-## Todo: 
-
-- [x] Save liked users to localStorage
-- [x] Captcha detection
-- [x] GUI
-
 ## Using the script as a JavaScript bookmark
 
 Fast and lightweight way to run the script.
