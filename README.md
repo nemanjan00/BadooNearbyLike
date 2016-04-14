@@ -2,5 +2,5 @@
 
 ## Todo: 
 
-- [ ] Save liked users to localStorage
+- [x] Save liked users to localStorage
 - [ ] GUI
