@@ -101,12 +101,12 @@ bot.getUsers().then(function(data){
 			var likes_count = 0;
 
 			data.forEach(function(like){
-				if(like.body[0.message_type != 1]){
+				if(like.body[0].message_type != 1){
 					likes_count++;
 				}
-
-				console.log("Liked " + likes_count + " users! ");
 			});
+
+			console.log("Liked " + likes_count + " users! ");
 		});
 	});
 });
