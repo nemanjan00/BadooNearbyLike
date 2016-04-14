@@ -1,4 +1,4 @@
-bot = {
+var bot = {
 	getUser: function(id){
 		var url = "/api.phtml?SERVER_GET_USER";
 
@@ -76,56 +76,82 @@ bot = {
 		});
 
 		return promise;
+	},
+
+	addToMenu(){
+		var html = '\
+		<span onclick="bot.massLike();" class="sidebar-menu__item-lnk">\
+			<i class="icon-svg icon-svg--xsm">\
+				<svg class="icon-svg_">\
+					<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-heart">\
+					</use>\
+				</svg>\
+			</i>\
+			<b class="sidebar__el-hidden">Mass like</b>\
+		</span>';
+
+		var menu = document.getElementsByClassName("sidebar-menu")[0];
+
+		var element = document.createElement('li');
+		element.className = "sidebar-menu__item search_";
+
+		element.innerHTML = html;
+
+		menu.appendChild(element)
+	},
+
+	massLike: function(){
+		bot.getUsers().then(function(data){
+			users = data.filter(function(user){return user.online_status < 3});
+
+			users = users.map(function(user){return user.user_id});
+
+			users = users.filter(function(user){
+				if(localStorage.getItem("user-"+user) != undefined){
+					return false;
+				}
+
+				return true;
+			});
+
+			var userDetailsPromises = users.map(function(user_id){
+				return bot.getUser(user_id);
+			});
+
+			Promise.all(userDetailsPromises).then(function(users){
+				users = users.filter(function(user){
+					if(user.my_vote == 1){
+						return true;
+					}
+					else
+					{
+						localStorage.setItem("user-" + user.user_id, true);
+
+						return false;
+					}
+				});
+
+				console.log(users.length + " users to like! ");
+
+				like_promises = users.map(function(user){return bot.vote(user.user_id)});
+
+				Promise.all(like_promises).then(function(data){
+					var likes_count = 0;
+
+					data.forEach(function(like, key){
+						if(like.body[0].message_type != 1){
+							localStorage.setItem("user-" + users[key].user_id, true);
+
+							likes_count++;
+						}
+					});
+
+					alert("Liked " + likes_count + " users! ");
+				});
+			});
+		});
 	}
 }
 
-bot.getUsers().then(function(data){
-	users = data.filter(function(user){return user.online_status < 3});
-
-	users = users.map(function(user){return user.user_id});
-
-	users = users.filter(function(user){
-		if(localStorage.getItem("user-"+user) != undefined){
-			return false;
-		}
-
-		return true;
-	});
-
-	var userDetailsPromises = users.map(function(user_id){
-		return bot.getUser(user_id);
-	});
-
-	Promise.all(userDetailsPromises).then(function(users){
-		users = users.filter(function(user){
-			if(user.my_vote == 1){
-				return true;
-			}
-			else
-			{
-				localStorage.setItem("user-" + user.user_id, true);
-
-				return false;
-			}
-		});
-
-		console.log(users.length + " users to like! ");
-
-		like_promises = users.map(function(user){return bot.vote(user.user_id)});
-
-		Promise.all(like_promises).then(function(data){
-			var likes_count = 0;
-
-			data.forEach(function(like, key){
-				if(like.body[0].message_type != 1){
-					localStorage.setItem("user-" + users[key].user_id, true);
-
-					likes_count++;
-				}
-			});
-
-			console.log("Liked " + likes_count + " users! ");
-		});
-	});
-});
+bot.addToMenu();
 
