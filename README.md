@@ -3,5 +3,5 @@
 ## Todo: 
 
 - [x] Save liked users to localStorage
-- [ ] Captcha detection
-- [ ] GUI
+- [x] Captcha detection
+- [x] GUI
