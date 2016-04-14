@@ -1,4 +1,4 @@
-var bot = {
+window.bot = {
 	getUser: function(id){
 		var url = "/api.phtml?SERVER_GET_USER";
 
@@ -66,11 +66,11 @@ var bot = {
 			xhr.setRequestHeader('X-Session-id', B.Session.getSessionId());
 			xhr.setRequestHeader('X-User-id', B.Session.getUserId());
 
-			xhr.onreadystatechange = function() {
+			xhr.onreadystatechange = (function() {
 				if (xhr.readyState == XMLHttpRequest.DONE) {
 					resolve(JSON.parse(xhr.responseText));
 				}
-			}
+			});
 
 			xhr.send(JSON.stringify(body));
 		});
@@ -80,7 +80,7 @@ var bot = {
 
 	addToMenu(){
 		var html = '\
-		<span onclick="bot.massLike();" class="sidebar-menu__item-lnk">\
+		<span onclick="window.bot.massLike();" class="sidebar-menu__item-lnk">\
 			<i class="icon-svg icon-svg--xsm">\
 				<svg class="icon-svg_">\
 					<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-heart">\
@@ -151,7 +151,12 @@ var bot = {
 			});
 		});
 	}
-}
+};
 
-bot.addToMenu();
+var interval = setInterval(function(){
+	if(document.getElementsByClassName("sidebar-menu")[0] !== undefined){
+		clearInterval(interval);
+		bot.addToMenu();
+	}
+}, 1000);
 
