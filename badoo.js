@@ -114,6 +114,8 @@ window.bot = {
 				return true;
 			});
 
+			users = users.slice(0, 100);
+
 			var userDetailsPromises = users.map(function(user_id){
 				return bot.getUser(user_id);
 			});
