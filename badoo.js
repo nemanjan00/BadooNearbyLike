@@ -102,7 +102,7 @@ window.bot = {
 
 	massLike: function(){
 		bot.getUsers().then(function(data){
-			users = data.filter(function(user){return user.online_status_text != "online_status_text" && user.online_status_text != "Bila je na mreži pre više od nedelju dana" && user.online_status_text != " Was online more than a week ago "});
+			users = data.filter(function(user){return user.online_status_text != "online_status_text" && user.online_status_text != "Bila je na mreži pre više od nedelju dana" && user.online_status_text != " Was online more than a week ago"});
 
 			users = users.map(function(user){return user.user_id});
 
