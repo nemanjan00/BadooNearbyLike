@@ -1,5 +1,19 @@
 # BadooNearbyAutolike
 
+Since online game is game of numbers, you most probably want to get in contact with as much women as possible and then pick out ones you like.
+
+This is very simple script which will let you like all nearby online girls with single click and then wait for them to like you back.
+
+To get even more exposure, you can set predefined opener and send it to 20 online nearby girls and, if they reply, you can continue conversation.
+
+Notes:
+
+Clicking mass like will get list of girls based on people nearby list, so, there is where you set distance, age, etc.
+
+It will check if you liked first 100 girls on list, it did not check before and like some of them. So, if tou want to like more girls, click again.
+
+It will probably at one moment say "Solve captcha" and, that is when you have to go to random profile and solve captcha, so, you can try again.
+
 ![](https://raw.githubusercontent.com/nemanjan00/BadooNearbyLike/master/screenshot/screenshot.png)
 
 ## Using the script as a JavaScript bookmark
