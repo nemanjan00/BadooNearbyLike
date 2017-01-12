@@ -1,4 +1,32 @@
+window.opener = localStorage.getItem("opener") || "Kako ovo radi, jesmo li sad u vezi? :3";
+
 window.bot = {
+	getChat: function(id){
+		var url = "/api.phtml?SERVER_OPEN_MESSENGER";
+
+		var body = {"version":1,"message_type":468,"message_id":41,"body":[{"message_type":468,"server_open_messenger":{"contacts_user_field_filter":{"projection":[330,200,700,580,640,600,610,250,340,280,230,650,800,501],"profile_photo_size":{"square_face_photo_size":{"width":100,"height":100}}},"chat_user_field_filter":{"projection":[330,331,200,700,580,640,600,610,250,340,280,290,291,310,301,302,680,303,304,210,230,731,650,570],"profile_photo_size":{"square_face_photo_size":{"width":300,"height":300}}},"initial_screen_user_field_filter":{"projection":[410,490,471,800],"united_friends_filter":[{"section_type":1}]},"user_id":id}}]};
+
+		var promise = new Promise(function(resolve, reject) {
+			bot._sendRequest(url, body).then(function(chat){
+				chat = chat.body[0].client_open_messenger.active_chat.initial_chat_screen;
+				
+				resolve(chat != undefined && chat.type == 2);
+			});
+		});
+		return promise;
+	},
+	sendMessage: function(id){
+		var url = "/api.phtml?SERVER_SEND_CHAT_MESSAGE";
+
+		var body = {"version":1,"message_type":104,"message_id":14,"body":[{"message_type":104,"chat_message":{"mssg":window.opener,"message_type":1,"uid":"1484187978520","from_person_id":"227562224","to_person_id":id,"read":false,"chat_block_id":2}}]};
+
+		var promise = new Promise(function(resolve, reject) {
+			bot._sendRequest(url, body).then(function(user){
+				resolve(true);
+			});
+		});
+		return promise;
+	},
 	getUser: function(id){
 		var url = "/api.phtml?SERVER_GET_USER";
 
@@ -17,7 +45,7 @@ window.bot = {
 	getUsers: function(page = 0){
 		var url = "/api.phtml?SERVER_GET_USER_LIST_WITH_SETTINGS";
 
-		body = {"$gpb":"badoo.bma.BadooMessage","version":1,"message_type":416,"message_id":18,"body":[{"$gpb":"badoo.bma.MessageBody","message_type":137,"search_settings_context":{"$gpb":"badoo.bma.SearchSettingsContext","search_response_context":2}},{"$gpb":"badoo.bma.MessageBody","message_type":245,"server_get_user_list":{"$gpb":"badoo.bma.ServerGetUserList","folder_id":25,"user_field_filter":{"$gpb":"badoo.bma.UserFieldFilter","projection":[250,200,210,230,310,330,530,540,340,331,680,290,291,301,303,304,302,260],"profile_photo_size":{"$gpb":"badoo.bma.PhotoSizeSpec","square_face_photo_size":{"$gpb":"badoo.bma.PhotoSize","width":180,"height":180}}},"offset":page * 100,"preferred_count":100,"promo_block_request_params":[{"$gpb":"badoo.bma.PromoBlockRequestParams","count":1,"position":2},{"$gpb":"badoo.bma.PromoBlockRequestParams","count":1,"position":1}]}}]};
+		body = {"version":1,"message_type":416,"message_id":24,"body":[{"message_type":502,"server_get_search_settings":{"context_type":2}},{"message_type":245,"server_get_user_list":{"folder_id":25,"user_field_filter":{"projection":[250,200,210,230,310,330,530,540,340,331,680,290,291,301,303,304,302,260],"profile_photo_size":{"square_face_photo_size":{"width":180,"height":180}}},"offset":page*100,"preferred_count":100,"promo_block_request_params":[{"count":1,"position":2},{"count":1,"position":1}],"filter":[0]}}]};
 
 		var promise = new Promise(function(resolve, reject) {
 			bot._sendRequest(url, body).then(function(users){
@@ -78,7 +106,7 @@ window.bot = {
 		return promise;
 	},
 
-	addToMenu(){
+	addToMenuLike(){
 		var html = '\
 		<span onclick="window.bot.massLike();" class="sidebar-menu__item-lnk">\
 			<i class="icon-svg icon-svg--xsm">\
@@ -98,6 +126,57 @@ window.bot = {
 		element.innerHTML = html;
 
 		menu.appendChild(element)
+	},
+
+	addToMenuChat(){
+		var html = '\
+		<span onclick="window.bot.massChat();" class="sidebar-menu__item-lnk">\
+			<i class="icon-svg icon-svg--xsm">\
+				<svg class="icon-svg_">\
+					<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-chat">\
+					</use>\
+				</svg>\
+			</i>\
+			<b class="sidebar__el-hidden">Mass chat</b>\
+		</span>';
+
+		var menu = document.getElementsByClassName("sidebar-menu")[0];
+
+		var element = document.createElement('li');
+		element.className = "sidebar-menu__item search_";
+
+		element.innerHTML = html;
+
+		menu.appendChild(element)
+	},
+
+	addToMenuOpener(){
+		var html = '\
+		<span onclick="window.bot.setOpener();" class="sidebar-menu__item-lnk">\
+			<i class="icon-svg icon-svg--xsm">\
+				<svg class="icon-svg_">\
+					<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-chat">\
+					</use>\
+				</svg>\
+			</i>\
+			<b class="sidebar__el-hidden">Set opener</b>\
+		</span>';
+
+		var menu = document.getElementsByClassName("sidebar-menu")[0];
+
+		var element = document.createElement('li');
+		element.className = "sidebar-menu__item search_";
+
+		element.innerHTML = html;
+
+		menu.appendChild(element)
+	},
+
+	setOpener: function(){
+		var opener = prompt("Opener? ", window.opener);
+
+		window.opener = opener;
+		localStorage.setItem("opener", opener);
 	},
 
 	massLike: function(){
@@ -163,13 +242,39 @@ window.bot = {
 				});
 			});
 		});
+	},
+
+	massChat: function(){
+		bot.getUsers().then(function(data){
+			users = data.filter(function(user){return user.online_status_text != "online_status_text" && user.online_status_text != "Bila je na mreži pre više od nedelju dana" && user.online_status_text != " Was online more than a week ago"});
+
+			users = users.map(function(user){return user.user_id});
+
+			var chats = users.map(function(id){
+				return bot.getChat(id);
+			});
+
+			Promise.all(chats).then(function(chats){
+				users = users.filter(function(id, key){
+					return chats[key];
+				});
+
+				alert("Sending message to "+users.length+" people! ");
+
+				users.map(function(id){
+					bot.sendMessage(id);
+				})
+			});
+		});
 	}
 };
 
 var interval = setInterval(function(){
 	if(document.getElementsByClassName("sidebar-menu")[0] !== undefined){
 		clearInterval(interval);
-		bot.addToMenu();
+		bot.addToMenuLike();
+		bot.addToMenuChat();
+		bot.addToMenuOpener();
 	}
 }, 1000);
 
