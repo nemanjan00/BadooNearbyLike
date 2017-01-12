@@ -14,6 +14,8 @@ It will check if you liked first 100 girls on list, it did not check before and 
 
 It will probably at one moment say "Solve captcha" and, that is when you have to go to random profile and solve captcha, so, you can try again.
 
+Make shure you set opener before using mass message! 
+
 ![](https://raw.githubusercontent.com/nemanjan00/BadooNearbyLike/master/screenshot/screenshot.png)
 
 ## Using the script as a JavaScript bookmark
