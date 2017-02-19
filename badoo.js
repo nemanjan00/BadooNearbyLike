@@ -106,70 +106,27 @@ window.bot = {
 		return promise;
 	},
 
-	addToMenuLike(){
+	addMenuItem: function(text, icon, botFunctionName) {
 		var html = '\
-		<span onclick="window.bot.massLike();" class="sidebar-menu__item-lnk">\
-			<i class="icon-svg icon-svg--xsm">\
-				<svg class="icon-svg_">\
-					<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-heart">\
-					</use>\
-				</svg>\
-			</i>\
-			<b class="sidebar__el-hidden">Mass like</b>\
-		</span>';
+		    <div onclick="window.bot.{{botFunctionName}}();" style="cursor: pointer" class="sidebar-menu__item friends_">\
+				<i class="icon icon--xsm">\
+					<svg class="icon-svg"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{{icon}}"></use></svg>\
+					<span class="mark mark--sm mark--red invisible">0</span>\
+				</i>\
+				<b class="sidebar-menu__item-txt sidebar__el-hidden">{{text}}</b>\
+				<span class="mark mark--red invisible">0</span>\
+			</div>';
+		
+		html = html
+			.replace('{{botFunctionName}}', botFunctionName)
+			.replace('{{icon}}', icon)
+			.replace('{{text}}', text);
 
-		var menu = document.getElementsByClassName("sidebar-menu")[0];
-
-		var element = document.createElement('li');
-		element.className = "sidebar-menu__item search_";
-
+		var element = document.createElement('div');
 		element.innerHTML = html;
-
-		menu.appendChild(element)
-	},
-
-	addToMenuChat(){
-		var html = '\
-		<span onclick="window.bot.massChat();" class="sidebar-menu__item-lnk">\
-			<i class="icon-svg icon-svg--xsm">\
-				<svg class="icon-svg_">\
-					<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-chat">\
-					</use>\
-				</svg>\
-			</i>\
-			<b class="sidebar__el-hidden">Mass chat</b>\
-		</span>';
-
+		
 		var menu = document.getElementsByClassName("sidebar-menu")[0];
-
-		var element = document.createElement('li');
-		element.className = "sidebar-menu__item search_";
-
-		element.innerHTML = html;
-
-		menu.appendChild(element)
-	},
-
-	addToMenuOpener(){
-		var html = '\
-		<span onclick="window.bot.setOpener();" class="sidebar-menu__item-lnk">\
-			<i class="icon-svg icon-svg--xsm">\
-				<svg class="icon-svg_">\
-					<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-chat">\
-					</use>\
-				</svg>\
-			</i>\
-			<b class="sidebar__el-hidden">Set opener</b>\
-		</span>';
-
-		var menu = document.getElementsByClassName("sidebar-menu")[0];
-
-		var element = document.createElement('li');
-		element.className = "sidebar-menu__item search_";
-
-		element.innerHTML = html;
-
-		menu.appendChild(element)
+		menu.appendChild(element);
 	},
 
 	setOpener: function(){
@@ -272,9 +229,9 @@ window.bot = {
 var interval = setInterval(function(){
 	if(document.getElementsByClassName("sidebar-menu")[0] !== undefined){
 		clearInterval(interval);
-		bot.addToMenuLike();
-		bot.addToMenuChat();
-		bot.addToMenuOpener();
+		bot.addMenuItem('Mass like', '#icon-heart', 'massLike');
+		bot.addMenuItem('Mass chat', '#icon-chat', 'massChat');
+		bot.addMenuItem('Set opener', '#icon-chat', 'setOpener');
 	}
 }, 1000);
 
