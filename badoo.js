@@ -239,4 +239,3 @@ var interval = setInterval(function(){
 		bot.addMenuItem('Set opener', '#icon-chat', 'setOpener');
 	}
 }, 1000);
-
