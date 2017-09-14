@@ -91,8 +91,8 @@ window.bot = {
 			xhr.open('POST', url, true);
 			xhr.setRequestHeader('Content-Type', 'json');
 
-			xhr.setRequestHeader('X-Session-id', B.Session.getSessionId());
-			xhr.setRequestHeader('X-User-id', B.Session.getUserId());
+			xhr.setRequestHeader('X-Session-id', $vars.Apification.session_id);
+			xhr.setRequestHeader('X-User-id', $vars.Apification.user_id);
 
 			xhr.onreadystatechange = (function() {
 				if (xhr.readyState == XMLHttpRequest.DONE) {
@@ -108,7 +108,7 @@ window.bot = {
 
 	addMenuItem: function(text, icon, botFunctionName) {
 		var html = '\
-		    <div onclick="window.bot.{{botFunctionName}}();" style="cursor: pointer" class="sidebar-menu__item friends_">\
+			<div onclick="window.bot.{{botFunctionName}}();" style="cursor: pointer" class="sidebar-menu__item friends_">\
 				<i class="icon icon--xsm">\
 					<svg class="icon-svg"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{{icon}}"></use></svg>\
 					<span class="mark mark--sm mark--red invisible">0</span>\
